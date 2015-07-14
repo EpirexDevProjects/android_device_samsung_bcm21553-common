@@ -78,7 +78,7 @@ ARCH_ARM_HAVE_TLS_REGISTER			:= true
 TARGET_SPECIFIC_HEADER_PATH			:= device/samsung/bcm21553-common/include
 BCM21553_HARDWARE				:= true
 BOARD_USES_BROADCOM_HARDWARE			:= true
-COMMON_GLOBAL_CFLAGS				+= -DBCM_HARDWARE
+COMMON_GLOBAL_CFLAGS				+= -BRCM_HARDWARE
 BOARD_USE_NASTY_PTHREAD_CREATE_HACK		:= true
 
 # Touchscreen
@@ -131,7 +131,7 @@ WIFI_DRIVER_MODULE_ARG				:= "firmware_path=/system/etc/firmware/bcm4330_sta.bin
 WIFI_DRIVER_MODULE_NAME				:= "bcmdhd"
 
 # Bluetooth
-#BOARD_BLUEDROID_VENDOR_CONF			:= device/samsung/bcm21553-common/bluetooth/vnd_samsung.txt
+#BOARD_BLUEDROID_VENDOR_CONF			:= 
 BOARD_HAVE_BLUETOOTH				:= true
 BOARD_HAVE_BLUETOOTH_BCM			:= true
 

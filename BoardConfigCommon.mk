@@ -40,20 +40,35 @@ ARM_EABI_TOOLCHAIN						:= $(ANDROID_BUILD_TOP)/prebuilt/linux-x86/toolchain/arm
 TARGET_KERNEL_SOURCE					:= kernel/samsung/bcm21553-common
 
 # Recovery
-ifneq (,$(filter cori,$(CM_BUILD)))
-TARGET_RECOVERY_FSTAB					:= device/samsung/bcm21553-common/recovery/mmc/recovery.fstab
-TARGET_USERIMAGES_USE_EXT4				:= true
-BOARD_FLASH_BLOCK_SIZE					:= 4096
+ifneq ($(RECOVERY_VARIANT),twrp)
+	TARGET_RECOVERY_FSTAB			:= device/samsung/bcm21553-common/recovery/fstab.cm.bcm21553
 else
-TARGET_RECOVERY_FSTAB					:= device/samsung/bcm21553-common/recovery/mtd/recovery.fstab
-BOARD_FLASH_BLOCK_SIZE					:= 131072
+	TARGET_RECOVERY_FSTAB			:= device/samsung/bcm21553-common/recovery/fstab.twrp.bcm21553
 endif
-BOARD_CUSTOM_RECOVERY_KEYMAPPING		:= ../../device/samsung/bcm21553-common/recovery/recovery_ui.c
+BOARD_BML_BOOT					:= "/dev/block/bml7"
+BOARD_BML_RECOVERY				:= "/dev/block/bml7"
+BOARD_CUSTOM_RECOVERY_KEYMAPPING		:= ../../device/samsung/bcm21553-common/recovery/bcm21553_recovery_keys.c
+BOARD_FLASH_BLOCK_SIZE				:= 131072
 BOARD_RECOVERY_HANDLES_MOUNT			:= true
-BOARD_HAS_DOWNLOAD_MODE					:= true
-TARGET_RECOVERY_PIXEL_FORMAT			:= "BGRA_8888"
-TARGET_NO_SEPARATE_RECOVERY				:= true
+BOARD_HAS_DOWNLOAD_MODE				:= true
+TARGET_RECOVERY_PIXEL_FORMAT			:= BGRA_8888
+TARGET_NO_SEPARATE_RECOVERY			:= true
 TARGET_RECOVERY_LCD_BACKLIGHT_PATH		:= \"/sys/class/backlight/aat1401-backlight/brightness\"
+
+# TWRP
+ifeq ($(RECOVERY_VARIANT),twrp)
+	TW_CUSTOM_CPU_TEMP_PATH := /sys/class/power_supply/battery/batt_temp
+	TW_CUSTOM_POWER_BUTTON := 116
+	TW_EXCLUDE_MTP := true
+	TW_EXCLUDE_SUPERSU := true
+	TW_EXCLUDE_ENCRYPTED_BACKUPS := true
+	TW_DISABLE_TTF := true
+	TW_HAS_DOWNLOAD_MODE := true
+	TW_HAS_NO_RECOVERY_PARTITION := true
+	TW_USE_MODEL_HARDWARE_ID_FOR_DEVICE_ID := true
+	TW_NO_REBOOT_BOOTLOADER := true
+	RECOVERY_GRAPHICS_USE_LINELENGTH := true
+endif
 
 # Charger mode
 BOARD_CHARGER_RES						:= device/samsung/bcm21553-common/prebuilt/res/charger

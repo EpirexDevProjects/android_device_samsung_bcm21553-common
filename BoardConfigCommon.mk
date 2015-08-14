@@ -35,8 +35,8 @@ TARGET_NO_RADIOIMAGE				:= true
 MINIGZIP					:= $(shell which lzma)
 
 # Kernel source
-TARGET_KERNEL_CUSTOM_TOOLCHAIN			:= arm-eabi-4.4.3
-ARM_EABI_TOOLCHAIN						:= $(ANDROID_BUILD_TOP)/prebuilt/linux-x86/toolchain/arm-eabi-4.4.3/bin
+TARGET_KERNEL_CUSTOM_TOOLCHAIN			:= arm-eabi-4.6
+ARM_EABI_TOOLCHAIN						:= $(ANDROID_BUILD_TOP)/prebuilt/linux-x86/toolchain/arm-eabi-4.6/bin
 TARGET_KERNEL_SOURCE					:= kernel/samsung/bcm21553-common
 
 # Recovery
@@ -151,9 +151,10 @@ WIFI_DRIVER_MODULE_ARG					:= "firmware_path=/system/etc/firmware/bcm4330_sta.bi
 WIFI_DRIVER_MODULE_NAME					:= "bcmdhd"
 
 # Bluetooth
-#BOARD_BLUEDROID_VENDOR_CONFIG			:= ../device/samsung/bcm21553-common/bluetooth/vnd_samsung.txt
-BOARD_HAVE_BLUETOOTH					:= true
-BOARD_HAVE_BLUETOOTH_BCM				:= true
+BOARD_BLUEDROID_VENDOR_CONF			:= device/samsung/bcm21553-common/bluetooth/vnd_samsung.txt
+BOARD_HAVE_BLUETOOTH				:= true
+BOARD_HAVE_BLUETOOTH_BCM			:= true
+BOARD_HAVE_SAMSUNG_BLUETOOTH		:= true
 
 # Browser
 JS_ENGINE								:= v8
@@ -166,6 +167,12 @@ TARGET_FORCE_CPU_UPLOAD					:= true
 
 # Packages
 BOARD_NO_HWCODECS						:= true
+
+## TEMPORARY HACK: skip building external/chromium_org/
+PRODUCT_PREBUILT_WEBVIEWCHROMIUM 		:= yes
+
+# zRAM size
+BOARD_ZRAM_SIZE							:= 50331648
 
 # FM
 #BOARD_HAVE_FM_RADIO					:= true

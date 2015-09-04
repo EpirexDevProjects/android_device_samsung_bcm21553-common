@@ -54,7 +54,6 @@ BOARD_HAS_DOWNLOAD_MODE				:= true
 TARGET_RECOVERY_PIXEL_FORMAT			:= "BGRA_8888"
 TARGET_NO_SEPARATE_RECOVERY			:= true
 TARGET_RECOVERY_LCD_BACKLIGHT_PATH		:= \"/sys/class/backlight/aat1401-backlight/brightness\"
-DEVICE_RESOLUTION                               := 320x480
 
 # TWRP
 ifeq ($(RECOVERY_VARIANT),twrp)

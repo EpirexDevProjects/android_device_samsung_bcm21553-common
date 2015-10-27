@@ -187,8 +187,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     dalvik.vm.dexopt-data-only=1 \
     dalvik.vm.dexopt-flags=v=a,o=v,m=y,u=y
 
-$(call inherit-product, frameworks/base/build/phone-hdpi-dalvik-heap.mk)
-
 # RIL
 PRODUCT_PROPERTY_OVERRIDES += \
     rild.libpath=/system/lib/libbrcm_ril.so \

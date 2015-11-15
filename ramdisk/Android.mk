@@ -4,12 +4,17 @@ LOCAL_PATH:= $(call my-dir)
 # fstab.gt-xxxxx
 
 include $(CLEAR_VARS)
-LOCAL_MODULE		:= recovery.fstab
+LOCAL_MODULE		:= fstab.$(SAMSUNG_BOOTLOADER)
 LOCAL_MODULE_TAGS	:= optional
 LOCAL_MODULE_CLASS	:= ETC
-LOCAL_SRC_FILES		:= ../recovery/mtd/recovery.fstab
+LOCAL_SRC_FILES		:= fstab.bcm21553
 LOCAL_MODULE_PATH	:= $(TARGET_ROOT_OUT)
 include $(BUILD_PREBUILT)
+
+$(LOCAL_BUILT_MODULE): $(LOCAL_PATH)/$(LOCAL_SRC_FILES)
+	@echo "Adjust mmc & zram configuration for fstab.$(SAMSUNG_BOOTLOADER): $< -> $@"
+	@mkdir -p $(dir $@)
+	$(hide) sed -e s#'/dev/block/mmcblk0\t\t\t'#'/devices/platform/bcm_sdhc.3/mmc_host/mmc1'#g -e 's/50331648/$(BOARD_ZRAM_SIZE)/g' $< >$@
 
 #######################################
 # init.gt-xxxxx.rc
@@ -25,7 +30,7 @@ include $(BUILD_PREBUILT)
 $(LOCAL_BUILT_MODULE): $(LOCAL_PATH)/$(LOCAL_SRC_FILES)
 	@echo "Adjust init rc script for $(SAMSUNG_BOOTLOADER): $< -> $@"
 	@mkdir -p $(dir $@)
-	$(hide) sed -e 's/init.bcm21553/init.$(SAMSUNG_BOOTLOADER)/g' $< >$@
+	$(hide) sed -e 's/fstab.bcm21553/fstab.$(SAMSUNG_BOOTLOADER)/g' -e 's/init.bcm21553/init.$(SAMSUNG_BOOTLOADER)/g' $< >$@
 
 #######################################
 # init.gt-xxxxx.bt.rc
@@ -96,7 +101,7 @@ include $(BUILD_PREBUILT)
 $(LOCAL_BUILT_MODULE): $(LOCAL_PATH)/$(LOCAL_SRC_FILES)
 	@echo "Adjust init rc script for $(SAMSUNG_BOOTLOADER): $< -> $@"
 	@mkdir -p $(dir $@)
-	$(hide) sed -e 's/init.bcm21553/init.$(SAMSUNG_BOOTLOADER)/g' $< >$@
+	$(hide) sed -e 's/fstab.bcm21553/fstab.$(SAMSUNG_BOOTLOADER)/g' -e 's/init.bcm21553/init.$(SAMSUNG_BOOTLOADER)/g' $< >$@
 
 #######################################
 # init.gt-xxxxx.sensors.rc
@@ -106,6 +111,17 @@ LOCAL_MODULE		:= init.$(SAMSUNG_BOOTLOADER).sensors.rc
 LOCAL_MODULE_TAGS	:= optional
 LOCAL_MODULE_CLASS	:= ETC
 LOCAL_SRC_FILES		:= init.bcm21553.sensors.rc
+LOCAL_MODULE_PATH	:= $(TARGET_ROOT_OUT)
+include $(BUILD_PREBUILT)
+
+#######################################
+# init.gt-xxxxx.swapart.rc
+
+include $(CLEAR_VARS)
+LOCAL_MODULE		:= init.$(SAMSUNG_BOOTLOADER).swapart.rc
+LOCAL_MODULE_TAGS	:= optional
+LOCAL_MODULE_CLASS	:= ETC
+LOCAL_SRC_FILES		:= init.bcm21553.swapart.rc
 LOCAL_MODULE_PATH	:= $(TARGET_ROOT_OUT)
 include $(BUILD_PREBUILT)
 

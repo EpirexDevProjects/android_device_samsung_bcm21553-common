@@ -9,7 +9,7 @@ on early-init
     mknod /dev/h6270enc    c 0666 211 0
     mknod /dev/hx170dec    c 0666 210 0
     mknod /dev/ttySMD0     c 0666 235 4
-    
+
     # this maps to /dev/mtd/mtd14 (cal), needed for RIL
     mknod /dev/bml15       c 0770 90 28
 
@@ -29,13 +29,7 @@ on init
 
 on boot
 
-# load HANTRO decoding/encoding hardware modules
     insmod /system/lib/modules/hx170dec.ko
     insmod /system/lib/modules/h6270enc.ko
-    
-# load Broadcom USB Gadget modules
     insmod /system/lib/modules/brcm_switch.ko
-    insmod /system/lib/modules/brcm_test_drv.ko
-      
-# load Broadcom Headset module
     insmod /system/lib/modules/brcm-headsetsw.ko

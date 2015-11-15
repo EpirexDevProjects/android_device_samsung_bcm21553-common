@@ -27,8 +27,9 @@ on post-fs-data
     chmod 0664 /sys/class/gpio/gpio21/value
 
 service wpa_supplicant /system/bin/wpa_supplicant \
-    -ieth0 -Dwext -c/data/misc/wifi/wpa_supplicant.conf \
-    -e/data/misc/wifi/entropy.bin -O/data/misc/wifi/sockets
+    -ieth0 -Dnl80211,wext -c/data/misc/wifi/wpa_supplicant.conf \
+    -e/data/misc/wifi/entropy.bin \
+    -O/data/misc/wifi/sockets -g@android:wpa_eth0
     class main
     socket wpa_eth0 dgram 0660 wifi wifi
     disabled
@@ -49,8 +50,8 @@ service wlandutservice /system/bin/wlandutservice
     disabled
     oneshot
 
-# get MAC Addresses via RIL for WiFi & BT
-service get_macaddrs /system/bin/logwrapper /system/bin/get_macaddrs
+# get mac addresses via RIL for wifi & BT
+service get_macaddrs /system/bin/logwrapper -k /system/bin/get_macaddrs
     class main
     user root
     oneshot
@@ -58,3 +59,4 @@ service get_macaddrs /system/bin/logwrapper /system/bin/get_macaddrs
 
 on property:init.svc.ril-daemon=running
     start get_macaddrs
+

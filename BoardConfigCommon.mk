@@ -35,9 +35,8 @@ TARGET_NO_RADIOIMAGE				:= true
 MINIGZIP					:= $(shell which lzma)
 
 # Kernel source
-TARGET_KERNEL_CUSTOM_TOOLCHAIN			:= arm-eabi-4.6
-ARM_EABI_TOOLCHAIN						:= $(ANDROID_BUILD_TOP)/prebuilt/linux-x86/toolchain/arm-eabi-4.6/bin
-TARGET_KERNEL_SOURCE					:= kernel/samsung/bcm21553-common
+TARGET_KERNEL_CUSTOM_TOOLCHAIN			:= arm-eabi-4.4.3
+TARGET_KERNEL_SOURCE				:= kernel/samsung/bcm21553-common
 
 # Recovery
 ifneq ($(RECOVERY_VARIANT),twrp)
@@ -47,14 +46,13 @@ else
 endif
 BOARD_BML_BOOT					:= "/dev/block/bml7"
 BOARD_BML_RECOVERY				:= "/dev/block/bml7"
-BOARD_CUSTOM_RECOVERY_KEYMAPPING		:= ../../device/samsung/bcm21553-common/recovery/recovery_ui.c
+BOARD_CUSTOM_RECOVERY_KEYMAPPING		:= ../../device/samsung/bcm21553-common/recovery/bcm21553_recovery_keys.c
 BOARD_FLASH_BLOCK_SIZE				:= 131072
 BOARD_RECOVERY_HANDLES_MOUNT			:= true
 BOARD_HAS_DOWNLOAD_MODE				:= true
 TARGET_RECOVERY_PIXEL_FORMAT			:= BGRA_8888
 TARGET_NO_SEPARATE_RECOVERY			:= true
 TARGET_RECOVERY_LCD_BACKLIGHT_PATH		:= \"/sys/class/backlight/aat1401-backlight/brightness\"
-DEVICE_RESOLUTION                               := 320x480
 
 # TWRP
 ifeq ($(RECOVERY_VARIANT),twrp)
@@ -72,14 +70,17 @@ ifeq ($(RECOVERY_VARIANT),twrp)
 endif
 
 # Charger mode
-BOARD_CHARGER_RES						:= device/samsung/bcm21553-common/prebuilt/res/charger
-BOARD_CHARGING_CMDLINE_NAME				:= "BOOT_MODE"
+BOARD_CHARGER_RES				:= device/samsung/bcm21553-common/prebuilt/res/charger
+BOARD_CHARGING_CMDLINE_NAME			:= "BOOT_MODE"
 BOARD_CHARGING_CMDLINE_VALUE			:= "1"
-BOARD_CHARGING_CMDLINE_RECOVERY_VALUE	:= "4"
+BOARD_CHARGING_CMDLINE_RECOVERY_VALUE		:= "4"
+
+# Health daemon
+BOARD_HAL_STATIC_LIBRARIES			:= libhealthd.bcm21553
 
 # Boot Animation
-TARGET_BOOTANIMATION_PRELOAD 			:= true
-TARGET_BOOTANIMATION_TEXTURE_CACHE 		:= true
+TARGET_BOOTANIMATION_PRELOAD			:= true
+TARGET_BOOTANIMATION_TEXTURE_CACHE		:= true
 
 # Platform
 TARGET_BOARD_PLATFORM				:= bcm21553
@@ -97,85 +98,94 @@ TARGET_SPECIFIC_HEADER_PATH			:= device/samsung/bcm21553-common/include
 BCM21553_HARDWARE				:= true
 BOARD_USES_BROADCOM_HARDWARE			:= true
 COMMON_GLOBAL_CFLAGS				+= -DBCM_HARDWARE
-BOARD_USE_NASTY_PTHREAD_CREATE_HACK		:= true
 
 # Touchscreen
 BOARD_USE_LEGACY_TOUCHSCREEN			:= true
 
 # Audio
-BOARD_USES_GENERIC_AUDIO				:= false
-BOARD_HAVE_SAMSUNG_AUDIO				:= true
-BOARD_USES_ALSA_AUDIO					:= true
+BOARD_USES_GENERIC_AUDIO			:= false
 
 # RIL
-BOARD_USES_LEGACY_RIL					:= true
+BOARD_USES_LEGACY_RIL				:= true
 BOARD_MOBILEDATA_INTERFACE_NAME			:= "pdp0"
 
 # Camera
-USE_CAMERA_STUB							:= false
-BOARD_NEEDS_MEMORYHEAPPMEM				:= true
-BOARD_CAMERA_HAVE_ISO					:= true
+USE_CAMERA_STUB					:= false
+BOARD_NEEDS_MEMORYHEAPPMEM			:= true
+BOARD_CAMERA_HAVE_ISO				:= true
 BOARD_CAMERA_NO_UNWANTED_MSG			:= true
 BOARD_CAMERA_USE_GETBUFFERINFO			:= true
 BOARD_USE_CAF_LIBCAMERA_GB_REL			:= true
-COMMON_GLOBAL_CFLAGS					+= -DNEEDS_VECTORIMPL_SYMBOLS
-COMMON_GLOBAL_CFLAGS					+= -DSAMSUNG_CAMERA_LEGACY
-COMMON_GLOBAL_CFLAGS 					+= -DBINDER_COMPAT
+BOARD_USE_NASTY_PTHREAD_CREATE_HACK		:= true
+COMMON_GLOBAL_CFLAGS				+= -DNEEDS_VECTORIMPL_SYMBOLS
+COMMON_GLOBAL_CFLAGS				+= -DSAMSUNG_CAMERA_LEGACY
+COMMON_GLOBAL_CFLAGS 				+= -DBINDER_COMPAT
 
 # GPU Stuff
-BOARD_EGL_CFG							:= hardware/broadcom/brcm_usrlib/dag/vmcsx/egl.cfg
-USE_OPENGL_RENDERER						:= true
-COMMON_GLOBAL_CFLAGS					+= -DMISSING_EGL_PIXEL_FORMAT_YV12 -DFORCE_EGL_CONFIG=0x2
+BOARD_EGL_CFG					:= hardware/broadcom/brcm_usrlib/dag/vmcsx/egl.cfg
+BOARD_USE_MHEAP_SCREENSHOT			:= true
+HWUI_COMPILE_FOR_PERF				:= true
+TARGET_DOESNT_USE_FENCE_SYNC			:= true
+TARGET_RUNNING_WITHOUT_SYNC_FRAMEWORK		:= true
+USE_OPENGL_RENDERER				:= true
+COMMON_GLOBAL_CFLAGS				+= -DEGL_NEEDS_FNW
+BOARD_NO_PAGE_FLIPPING				:= true
+
 
 # Minimal Fonts
-SMALLER_FONT_FOOTPRINT					:= true
+SMALLER_FONT_FOOTPRINT				:= true
 
 # USB
 TARGET_USE_CUSTOM_LUN_FILE_PATH			:= /sys/devices/lm-2/gadget/lun0/file
-BOARD_UMS_LUNFILE						:= "/sys/devices/lm-2/gadget/lun0/file"
+BOARD_UMS_LUNFILE				:= "/sys/devices/lm-2/gadget/lun0/file"
 
 # Wifi
-BOARD_WPA_SUPPLICANT_DRIVER				:= WEXT
-WPA_SUPPLICANT_VERSION					:= VER_0_8_X
+BOARD_WPA_SUPPLICANT_DRIVER			:= WEXT
+WPA_SUPPLICANT_VERSION				:= VER_0_8_X
 BOARD_WPA_SUPPLICANT_PRIVATE_LIB		:= lib_driver_cmd_bcmdhd
-BOARD_WLAN_DEVICE						:= bcm4330
-BOARD_WLAN_DEVICE_REV					:= bcm4330_b1_totoro
+BOARD_WLAN_DEVICE				:= bcm4330
+BOARD_WLAN_DEVICE_REV				:= bcm4330_b1_totoro
 
-WIFI_DRIVER_MODULE_PATH					:= "/system/lib/modules/bcmdhd.ko"
-WIFI_DRIVER_FW_PATH_AP					:= "/system/etc/firmware/bcm4330_aps.bin"
-WIFI_DRIVER_FW_PATH_STA					:= "/system/etc/firmware/bcm4330_sta.bin"
-WIFI_DRIVER_FW_PATH_P2P					:= "/system/etc/firmware/bcm4330_aps.bin"
-WIFI_DRIVER_MODULE_ARG					:= "firmware_path=/system/etc/firmware/bcm4330_sta.bin nvram_path=/system/etc/firmware/nvram.txt"
-WIFI_DRIVER_MODULE_NAME					:= "bcmdhd"
+WIFI_DRIVER_MODULE_PATH				:= "/system/lib/modules/bcmdhd.ko"
+WIFI_DRIVER_FW_PATH_AP				:= "/system/etc/firmware/bcm4330_aps.bin"
+WIFI_DRIVER_FW_PATH_STA				:= "/system/etc/firmware/bcm4330_sta.bin"
+WIFI_DRIVER_FW_PATH_P2P				:= "/system/etc/firmware/bcm4330_aps.bin"
+WIFI_DRIVER_MODULE_ARG				:= "firmware_path=/system/etc/firmware/bcm4330_sta.bin nvram_path=/system/etc/firmware/nvram.txt"
+WIFI_DRIVER_MODULE_NAME				:= "bcmdhd"
+
+# Wifi AP
+USE_LEGACY_SOFTAP				:= true
 
 # Bluetooth
 BOARD_BLUEDROID_VENDOR_CONF			:= device/samsung/bcm21553-common/bluetooth/vnd_samsung.txt
 BOARD_HAVE_BLUETOOTH				:= true
 BOARD_HAVE_BLUETOOTH_BCM			:= true
-BOARD_HAVE_SAMSUNG_BLUETOOTH		:= true
+BOARD_HAVE_SAMSUNG_BLUETOOTH			:= true
 
 # Browser
-JS_ENGINE								:= v8
-HTTP									:= chrome
-WITH_JIT								:= true
-ENABLE_JSC_JIT							:= true
-ENABLE_WEBGL							:= true
+JS_ENGINE					:= v8
+HTTP						:= chrome
+WITH_JIT					:= true
+ENABLE_JSC_JIT					:= true
 TARGET_WEBKIT_USE_MORE_MEMORY			:= true
-TARGET_FORCE_CPU_UPLOAD					:= true
+TARGET_FORCE_CPU_UPLOAD				:= true
 
-# Packages
-BOARD_NO_HWCODECS						:= true
+# FM
+#BOARD_HAVE_FM_RADIO				:= true
+#BOARD_FM_DEVICE				:= bcm4329
+#BOARD_GLOBAL_CFLAGS+= -DHAVE_FM_RADIO
 
 ## TEMPORARY HACK: skip building external/chromium_org/
 PRODUCT_PREBUILT_WEBVIEWCHROMIUM 		:= yes
 
+# Squisher
+TARGET_SYSTEMIMAGE_USE_SQUISHER			:= true
+
+# Releasetools extras
+TARGET_OTA_EXTRAS_FILE				:= device/samsung/bcm21553-common/releasetools-extras.txt
+
 # zRAM size
-BOARD_ZRAM_SIZE							:= 50331648
+BOARD_ZRAM_SIZE					:= 50331648
 
 # SELinux
 POLICYVERS					:= 24
-
-# FM
-#BOARD_HAVE_FM_RADIO					:= true
-#BOARD_GLOBAL_CFLAGS					+= -DHAVE_FM_RADIO
-#BOARD_FM_DEVICE						:= bcm4329

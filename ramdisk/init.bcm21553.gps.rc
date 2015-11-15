@@ -1,8 +1,3 @@
-on init
-
-# gps config (workaround)
-    symlink /system/etc/gps.conf /etc/gps.conf
-
 on post-fs-data
 
 # delete old sockets
@@ -22,7 +17,7 @@ on boot
 
     chown gps system /data/gps/glgpsctrl
 
-# define Broadcom GPS properties
+# define broadcom gps properties
     setprop gps.fd.block "false"
 
 service gpsd /system/bin/glgps -c /system/etc/gps/glconfig4751.xml

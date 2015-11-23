@@ -103,6 +103,7 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.sip.xml:system/etc/permissions/android.software.sip.xml \
     frameworks/native/data/etc/android.software.sip.voip.xml:system/etc/permissions/android.software.sip.voip.xml \
     frameworks/native/data/etc/android.hardware.usb.accessory.xml:system/etc/permissions/android.hardware.usb.accessory.xml \
+    frameworks/base/data/etc/android.hardware.camera.xml:system/etc/permissions/android.hardware.camera.xml \
     packages/wallpapers/LivePicker/android.software.live_wallpaper.xml:system/etc/permissions/android.software.live_wallpaper.xml
 
 # Keylayout
@@ -166,15 +167,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.opengles.surface.rgba8888=true \
     ro.systemui.use_gl_wallpaper=0 \
     ro.zygote.disable_gl_preload=true
-
-## Graphics density
-ifneq (,$(filter cooperve,$(CM_BUILD)))
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.sf.lcd_density=160
-else
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.sf.lcd_density=120
-endif
 
 # Memory
 PRODUCT_PROPERTY_OVERRIDES += \
